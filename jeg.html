@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Image Upload Prediction</title>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<!-- Bootstrap CSS -->
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+	<!-- Custom CSS -->
+	<style>
+		.container {
+			margin-top: 50px;
+			text-align: center;
+		}
+		img.preview {
+			max-width: 100%;
+			height: auto;
+		}
+	</style>
+</head>
+<body>
+	<div class="container">
+		<h2>Image Upload Prediction</h2>
+		<form id="uploadForm" method="post" enctype="multipart/form-data">
+			<div class="form-group">
+				<label for="image">Select image to upload:</label>
+				<input type="file" class="form-control-file" id="image" name="image">
+			</div>
+			<button type="submit" class="btn btn-primary">Submit</button>
+		</form>
+		<br>
+		<div id="preview" style="display:none;">
+			<h3>Preview:</h3>
+			<img src="" alt="Preview Image" class="preview" id="previewImage">
+		</div>
+		<div id="prediction" style="display:none;">
+			<h3>Prediction Result:</h3>
+			<p id="result"></p>
+		</div>
+	</div>
+
+	<!-- jQuery library -->
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+
+	<!-- Bootstrap JS -->
+	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+
+	<script>
+		$(document).ready(function(){
+			$('#image').on('change', function(e){
+				var file = e.target.files[0];
+				if (file) {
+					var reader = new FileReader();
+					reader.readAsDataURL(file);
+					reader.onload = function() {
+						$('#previewImage').attr('src', reader.result);
+						$('#preview').show();
+					}
+				}
+			});
+
+			$('#uploadForm').on('submit', function(e){
+				e.preventDefault();
+				// Generate random percentage prediction
+				var prediction = Math.floor(Math.random() * 50) + 49;
+				$('#result').html(prediction + '%');
+				$("#prediction").show();
+			});
+		});
+	</script>
+</body>
+</html>
