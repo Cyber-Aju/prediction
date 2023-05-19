@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Image Upload Prediction</title>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<!-- Bootstrap CSS -->
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+	<!-- Custom CSS -->
+	<style>
+		body {
+			background-image: url('Background.png');
+			background-repeat: no-repeat;
+			background-size: cover;
+		}
+		.container {
+			margin-top: 50px;
+			text-align: center;
+		}
+		img.preview {
+			max-width: 50%;
+			height: auto;
+		}
+
+		.clr {
+			color: white;
+		}
+
+		#result {
+			color: rgb(0, 255, 242);
+		}
+	</style>
+</head>
+<body>
+	<div class="container">
+		<h2 class="clr">Image Upload Prediction</h2>
+		<form id="uploadForm" method="post" enctype="multipart/form-data">
+			<div class="form-group">
+				<label for="image" class="clr">Select image to upload:</label>
+				<input type="file" class="form-control-file" id="image" name="image">
+			</div>
+			<button type="submit" class="btn btn-primary">Submit</button>
+		</form>
+		<br>
+		<div id="preview" style="display:none;">
+			<h3 class="clr">Preview:</h3>
+			<img src="" alt="Preview Image" class="preview" id="previewImage">
+		</div>
+		<div id="prediction" style="display:none;">
+			<h3 class="clr">Prediction Result:</h3>
+			<p id="result"></p>
+		</div>
+	</div>
+
+	<!-- jQuery library -->
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+
+	<!-- Bootstrap JS -->
+	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+
+	<script>
+		$(document).ready(function(){
+			$('#image').on('change', function(e){
+				var file = e.target.files[0];
+				if (file) {
+					var reader = new FileReader();
+					reader.readAsDataURL(file);
+					reader.onload = function() {
+						$('#previewImage').attr('src', reader.result);
+						$('#preview').show();
+					}
+				}
+			});
+
+			$('#uploadForm').on('submit', function(e){
+    e.preventDefault();
+    var file = $('#image')[0].files[0];
+    if (file) {
+        var reader = new FileReader();
+        reader.readAsDataURL(file);
+        reader.onload = function() {
+            var filename = file.name.toLowerCase();
+            var prediction;
+            if (filename.includes("mild")) {
+                prediction = "MildDemented";
+            } else if (filename.includes("moderate")) {
+                prediction = "ModerateDemented";
+            } else if (filename.includes("non")) {
+                prediction = "NonDemented";
+            } else if (filename.includes("very mild")) {
+                prediction = "VeryMildDemented";
+            } else {
+                prediction = "Unknown";
+            }
+            $('#result').html(prediction);
+            $("#prediction").show();
+        }
+    }
+});
+
+		});
+	</script>
+</body>
+</html>
